@@ -44,6 +44,8 @@ exports.updateUser = catchAsync(async (req, res, next) => {
     if (req.body.username) user.username = req.body.username;
     if (req.body.role) user.role = req.body.role;
     if (req.body.phoneNumber) user.phoneNumber = req.body.phoneNumber;
+    if (req.body.secretCodeVerified === true) user.secretCodeVerified = true;
+    if (req.body.secretCodeVerified === false) user.secretCodeVerified = false;
     if (req.body.active === true) {
         user.active = true;
         logger.info(`${user.name}'s account re-activated successfully`);

@@ -10,7 +10,7 @@ const imagekit = require('../utils/imagekit');
 
 exports.getAllEntries = catchAsync(async (req, res, next) => {
     const Entry = getModel(req.params.model);
-    const result = new APIFeatures(Entry.find(), req.query)
+    const result = new APIFeatures(Entry.find({visible: true}), req.query)
         .filter()
         .sort()
         .limitFields()

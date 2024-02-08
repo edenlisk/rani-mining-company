@@ -1052,6 +1052,191 @@ exports.permissions = {
     labTechnician
 }
 
+exports.defaultPermissions = {
+    entry: {
+        view: true,
+        create: true,
+        edit: true,
+        delete: true
+    },
+    dashboard: {
+        view: true
+    },
+    suppliers: {
+        view: true,
+        create: true,
+        edit: true,
+        delete: true
+    },
+    payments: {
+        view: true,
+        create: true,
+        edit: true,
+        delete: true
+    },
+    shipments: {
+        view: true,
+        create: true,
+        edit: true,
+        delete: true
+    },
+    mineralGrade: {
+        view: true,
+        create: true,
+        edit: true,
+    },
+    ASIR: {
+        view: true,
+        create: true,
+        edit: true,
+    },
+    pricingGrade: {
+        view: true,
+        create: true,
+        edit: true,
+    },
+    pricePerUnit: {
+        view: true,
+        create: true,
+        edit: true,
+    },
+    mineralPrice: {
+        view: true,
+        create: true,
+        edit: true,
+    },
+    netPrice: {
+        view: true,
+        create: true,
+        edit: true,
+    },
+    invoices: {
+        view: true,
+        create: true,
+        edit: true,
+    },
+    gradeImg: {
+        view: true,
+        create: true,
+        edit: true,
+    },
+    tantal: {
+        view: true,
+        create: true,
+        edit: true,
+    },
+    niobium: {
+        view: true,
+        create: true,
+        edit: true,
+    },
+    iron: {
+        view: true,
+        create: true,
+        edit: true,
+    },
+    londonMetalExchange: {
+        view: true,
+        create: true,
+        edit: true,
+    },
+    treatmentCharges: {
+        view: true,
+        create: true,
+        edit: true
+    },
+    metricTonUnit: {
+        view: true,
+        create: true,
+        edit: true
+    },
+    negociantTags: {
+        view: true,
+        create: true,
+        edit: true
+    },
+    mineTags: {
+        view: true,
+        create: true,
+        edit: true
+    },
+    sampleIdentification: {
+        view: true,
+        create: true,
+        edit: true
+    },
+    USDRate: {
+        view: true,
+        create: true,
+        edit: true,
+    },
+    rmaFeeRWF:{
+        view: true,
+    },
+    rmaFeeUSD: {
+        view: true,
+    },
+    paymentHistory: {
+        view: true,
+        create: true,
+        edit: true
+    },
+    shipmentHistory: {
+        view: true,
+        create: true,
+        edit: true
+    },
+    settings: {
+        view: false,
+        edit: false
+    },
+    buyers: {
+        view: true,
+        create: true,
+        edit: true,
+        delete: true
+    },
+    users: {
+        view: true,
+        create: true,
+        edit: true,
+        delete: true
+    },
+    contracts: {
+        view: true,
+        create: true,
+        delete: false
+    },
+    editRequests: {
+        view: true,
+        authorize: true,
+        reject: true
+    },
+    nonSellAgreement: {
+        view: true,
+        edit: true
+    },
+    tags: {
+        view: true,
+        create: true,
+        edit: true,
+    },
+    fileDirectory: {
+        view: true,
+        edit: true
+    },
+    dueDiligence: {
+        view: true,
+        create: true,
+        edit: true,
+    },
+    comment: {
+        view: true,
+        create: true,
+        edit: true,
+    }
+}
+
 const specialStrings = ["TINNumber", "rmaFee", "USDRate", "rmaFeeUSD", "rmaFeeRWF"];
 
 

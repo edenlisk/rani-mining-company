@@ -57,6 +57,7 @@ exports.currentStock = catchAsync(async (req, res, next) => {
             [
                 {
                     $match: {
+                        visible: true,
                         "supplyDate": { $gte: new Date(req.params.year ? req.params.year : new Date().getFullYear(), 0, 1) }
                     }
                 },

@@ -102,6 +102,10 @@ const userSchema = new mongoose.Schema(
         secretCode: {
             type: String,
         },
+        secretCodeVerified: {
+            type: Boolean,
+            default: false
+        },
         secretCodeExpiresAt: {
             type: Date,
         }

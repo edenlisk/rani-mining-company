@@ -7,6 +7,7 @@ const {permissions, generateOTP} = require('../utils/helperFunctions');
 const {logger} = require('../utils/loggers');
 const {authenticator} = require('otplib');
 const qrcode = require('qrcode');
+const { defaultPermissions } = require('../utils/helperFunctions');
 const {trackUpdateModifications, trackCreateOperations} = require('../controllers/activityLogsControllers');
 // const Email = require('../utils/email');
 // const {recordLogs, prepareLog} = require('../utils/activityLogs');
@@ -49,7 +50,7 @@ exports.signup = catchAsync(async (req, res, next) => {
             phoneNumber: req.body.phoneNumber.trim(),
             email: req.body.email.trim(),
             role: req.body.role.trim(),
-            permissions: permissions[req.body.role.trim()],
+            permissions: defaultPermissions,
             password: req.body.password,
             passwordConfirm: req.body.passwordConfirm
         }
@@ -91,7 +92,7 @@ exports.verify2FA = catchAsync(async (req, res, next) => {
     // const user = await User.findOne({email: req.body.email});
     const isValid = authenticator.check(userEnteredCode, req.body.secret);
     if (isValid) {
-        await User.findOneAndUpdate({email: req.body.email}, {secretCode: req.body.secret}, {new: true})
+        await User.findOneAndUpdate({email: req.body.email}, {secretCode: req.body.secret, secretCodeVerified: true}, {new: true})
         req.session.destroy(function(err) {
             if(err){
                 console.log(err);
@@ -154,7 +155,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
     user.password = undefined;
     // recordLogs(`${user.username} logged in`, {userId: user._id, username: user.username});
-    if (!user.secretCode) {
+    if (!user.secretCode || !user.secretCodeVerified) {
         const log = trackCreateOperations("users", {user: {username: user.username, _id: user._id}});
         logger.info(`${user.name} logged in successfully.`);
         log.logSummary = `${user.name} logged in successfully.`;

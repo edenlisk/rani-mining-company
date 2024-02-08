@@ -203,6 +203,7 @@ coltanSchema.pre('save', async function (next) {
 coltanSchema.statics.findCurrentStock = async function () {
     const result = await this.find(
         {
+            visible: true,
             $and: [
                 {
                     $expr: {

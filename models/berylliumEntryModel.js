@@ -40,6 +40,7 @@ berylliumLotSchema.pre('save', async function (next) {
 berylliumSchema.statics.findCurrentStock = async function () {
     const result = await this.find(
         {
+            visible: true,
             $and: [
                 {
                     $expr: {
