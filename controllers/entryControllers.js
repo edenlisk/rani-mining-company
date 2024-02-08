@@ -35,7 +35,7 @@ exports.getAllEntries = catchAsync(async (req, res, next) => {
 
 exports.getOneEntry = catchAsync(async (req, res, next) => {
     const Entry = getModel(req.params.model);
-    const entry = await Entry.findById(req.params.entryId);
+    const entry = await Entry.findById(req.params.entryId).populate('mineTags').populate('negociantTags');
     if (!entry) return next(new AppError(`${req.params.model?.toUpperCase()} entry was not found, please try again latter`, 400));
     res
         .status(200)
@@ -137,7 +137,7 @@ exports.updateEntry = catchAsync(async (req, res, next) => {
         await Promise.all(filePromises);
     }
     if (req.body.supplierId) entry.supplierId = req.body.supplierId;
-    if (req.companyName) entry.companyName = req.body.companyName;
+    if (req.body.companyName) entry.companyName = req.body.companyName;
     if (req.body.TINNumber) entry.TINNumber = req.body.TINNumber;
     if (req.body.licenseNumber) entry.licenseNumber = req.body.licenseNumber;
     if (req.body.mineTags) await updateMineTags(req.body.mineTags, entry);

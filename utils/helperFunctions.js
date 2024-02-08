@@ -1319,7 +1319,6 @@ exports.updateNegociantTags = async (negociantTags, entry) => {
             if (existingTag.weight !== tag.weight) existingTag.weight = tag.weight;
             if (existingTag.sheetNumber !== tag.sheetNumber) existingTag.sheetNumber = tag.sheetNumber;
             if (existingTag.entryId !== entry._id) existingTag.entryId = entry._id;
-
             if (!entry.negociantTags.includes(new mongoose.Types.ObjectId(existingTag._id))) {
                 entry.negociantTags.push(existingTag._id);
             }
@@ -1453,6 +1452,7 @@ exports.createNewEntry = async (req, Entry, model) => {
             TINNumber: req.body.TINNumber,
             mineralType: req.body.mineralType,
             // representativeId: supplier.representativeId,
+            companyRepresentative: req.body.companyRepresentative,
             email: req.body.email,
             output: req.body[decideOutput(model, req.body.mineralType)],
             representativePhoneNumber: req.body.representativePhoneNumber,
