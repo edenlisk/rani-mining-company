@@ -15,6 +15,12 @@ const assetsSchema = new mongoose.Schema(
         },
         numberOfItems: {
             type: Number
+        },
+        comment: {
+            type: String
+        },
+        status: {
+            type: String
         }
     }
 )
