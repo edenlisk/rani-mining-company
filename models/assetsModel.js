@@ -5,23 +5,38 @@ const assetsSchema = new mongoose.Schema(
     {
         name: {
             type: String,
+            required: [true, "Please provide asset name"]
         },
-        price: {
-            type: String,
+        value: {
+            type: Number,
         },
         category: {
             type: String,
-            enum: ['electronics', 'furniture']
+            // enum: ['electronics', 'furniture']
         },
         numberOfItems: {
             type: Number
+        },
+        acquisitionDate: {
+            type: Date,
+            default: () => new Date()
         },
         comment: {
             type: String
         },
         status: {
-            type: String
-        }
+            type: String,
+            // enum: ["active", "inactive", "damaged", "lost", "retired"],
+        },
+        currency: {
+            type: String,
+            enum: ["USD", "RWF"],
+            default: () => "RWF"
+        },
+        type: {
+            type: String,
+            enum: ["fixed", "current"]
+        },
     }
 )
 

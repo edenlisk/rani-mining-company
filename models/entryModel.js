@@ -98,9 +98,20 @@ const lotSchema = new mongoose.Schema(
             type: Number,
             required: [true, "Please provide lot number"],
         },
+        weightBefore: {
+            type: Number,
+            required: [true, "Please provide weight before separation/washing"],
+        },
         weightOut: {
             type: Number,
-            required: [true, "Please provide weight out"],
+            validate: {
+                validator: function (val) {
+                    if (val && this.weightBefore) {
+                        return val <= this.weightBefore;
+                    }
+                },
+                message: "Weight-out must be less than or equal to weight before separation/washing."
+            },
         },
         mineralGrade: {
             type: Number,

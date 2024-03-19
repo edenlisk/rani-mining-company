@@ -50,6 +50,7 @@ coltanLotSchema.pre('save', async function(next) {
             this.rmaFeeRWF = this.weightOut * rmaFeeColtan;
         }
     }
+    console.log(this);
     next();
 })
 
