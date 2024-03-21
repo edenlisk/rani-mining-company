@@ -43,10 +43,11 @@ exports.getOneExpense = catchAsync(async (req, res, next) => {
 exports.addExpense = catchAsync(async (req, res, next) => {
     const newExpense = await ExpensesModel.create(
         {
+            name: req.body.name,
             date: req.body.date,
             amount: req.body.amount,
             description: req.body.description,
-            currency: req.body.currency
+            typeOfExpense: req.body.typeOfExpense,
         }
     );
     res
@@ -68,7 +69,8 @@ exports.updateExpense = catchAsync(async (req, res, next) => {
     if (req.body.date) expense.date = req.body.date;
     if (req.body.amount) expense.amount = req.body.amount;
     if (req.body.description) expense.description = req.body.description;
-    if (req.body.currency) expense.currency = req.body.currency;
+    if (req.body.name) expense.name = req.body.name;
+    if (req.body.typeOfExpense) expense.typeOfExpense = req.body.typeOfExpense;
     await expense.save();
     res
         .status(201)

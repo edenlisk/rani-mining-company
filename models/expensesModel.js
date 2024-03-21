@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const expenseSchema = new mongoose.Schema(
     {
+        name: {
+            // Beneficiary
+            type: String,
+        },
         date: {
             type: Date,
             default: Date.now
@@ -13,14 +17,14 @@ const expenseSchema = new mongoose.Schema(
         description: {
             type: String,
         },
-        currency: {
+        typeOfExpense: {
             type: String,
-            enum: ['USD', 'RWF']
+            // enum: ['transport', 'fuel', 'labor', 'other'],
         }
     }, {
         timestamps: true,
         toJSON: {virtuals: true},
-        toObject: {virtuals: true}
+        toObject: {virtuals: true},
     }
 )
 

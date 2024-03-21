@@ -45,6 +45,8 @@ const chatRouter = require('./routes/chatRouter');
 const activityLogsRouter = require('./routes/activityLogsRouter');
 const tagsRouter = require('./routes/tagsRouter');
 const assetsRouter = require('./routes/assetsRouter');
+const expensesRouter = require('./routes/expensesRouter');
+const beneficiaryRouter = require('./routes/beneficiaryRouter');
 
 const app = express();
 
@@ -116,7 +118,9 @@ app.use('/api/v1/chat', chatRouter);
 app.use('/api/v1/message', messageRouter);
 app.use('/api/v1/logs', activityLogsRouter);
 app.use('/api/v1/tags', tagsRouter);
+app.use('/api/v1/expenses', expensesRouter);
 app.use('/api/v1/assets', assetsRouter);
+app.use('/api/v1/beneficiaries', beneficiaryRouter);
 // app.use('/api/v1/risk-assessment', riskAssessmentRouter);
 app.use(expressWinston.logger({
     winstonInstance: appLogger,
