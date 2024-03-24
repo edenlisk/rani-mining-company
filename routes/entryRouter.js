@@ -10,7 +10,7 @@ const { protect, restrictTo } = require('../controllers/authControllers');
 const router = Router();
 
 router.route('/:model')
-    .get(protect, getAllEntries)
+    .get(getAllEntries)
     .post(protect, createEntry)
 
 router.route('/:model/:entryId')

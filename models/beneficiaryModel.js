@@ -15,6 +15,9 @@ const beneficiarySchema = new mongoose.Schema(
         phoneNumber: {
             type: String,
             required: "Please provide beneficiary phone number"
+        },
+        category: {
+            type: String
         }
     },{
         timestamps: true,

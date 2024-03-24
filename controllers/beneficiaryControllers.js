@@ -41,6 +41,7 @@ exports.addBeneficiary = catchAsync(async (req, res, next) => {
             name: req.body.name,
             phoneNumber: req.body.phoneNumber,
             address: req.body.address,
+            category: req.body.category
         }
     );
     res
@@ -62,6 +63,7 @@ exports.updateBeneficiary = catchAsync(async (req, res, next) => {
     if (req.body.name) beneficiary.name = req.body.name;
     if (req.body.phoneNumber) beneficiary.phoneNumber = req.body.phoneNumber;
     if (req.body.address) beneficiary.address = req.body.address;
+    if (req.body.category) beneficiary.category = req.body.category;
     await beneficiary.save();
     res
         .status(202)

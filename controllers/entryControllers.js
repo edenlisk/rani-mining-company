@@ -18,7 +18,7 @@ exports.getAllEntries = catchAsync(async (req, res, next) => {
     ;
     const entries = await result.mongooseQuery;
     const numberOfDocuments = await Entry.countDocuments();
-
+    const totalPages = Math.ceil(numberOfDocuments / 100);
     res
         .status(200)
         .json(
@@ -26,7 +26,7 @@ exports.getAllEntries = catchAsync(async (req, res, next) => {
                 status: "Success",
                 data: {
                     entries,
-                    numberOfDocuments
+                    totalPages
                 }
             }
         )

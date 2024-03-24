@@ -83,6 +83,10 @@ const entrySchema = new mongoose.Schema(
         visible: {
             type: Boolean,
             default: true
+        },
+        commissioner: {
+            type: mongoose.SchemaTypes.ObjectId,
+            ref: 'Beneficiary'
         }
     },{
         timestamps: true,
@@ -300,7 +304,6 @@ lotSchema.virtual('paid').get(function () {
             return acc;
         }
     }, 0);
-
 })
 
 lotSchema.virtual('rmaFeeUSD').get(function () {

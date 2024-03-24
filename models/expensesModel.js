@@ -20,6 +20,10 @@ const expenseSchema = new mongoose.Schema(
         typeOfExpense: {
             type: String,
             // enum: ['transport', 'fuel', 'labor', 'other'],
+        },
+        supportingDocument: {
+            fileId: String,
+            filePath: String
         }
     }, {
         timestamps: true,

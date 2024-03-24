@@ -15,7 +15,7 @@ const paymentSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Entry'
         },
-        lotNumber: Number,
+        // lotNumber: Number,
         companyName: {
             type: String,
         },
@@ -62,6 +62,10 @@ const paymentSchema = new mongoose.Schema(
         paymentMode: {
             type: String,
             default: null
+        },
+        supportingDoc: {
+            fileId: String,
+            filePath: String
         }
     },
     {timestamps: true}

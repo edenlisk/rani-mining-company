@@ -11,13 +11,16 @@ exports.getAllLogs = catchAsync(async (req, res, next) => {
         .paginate()
     ;
     const logs = await results.mongooseQuery;
+    const numberOfDocuments = await ActivityLogs.countDocuments();
+    const totalPages = Math.ceil(numberOfDocuments / 100);
     res
         .status(200)
         .json(
             {
                 status: "Success",
                 data: {
-                    logs
+                    logs,
+                    totalPages
                 }
             }
         )

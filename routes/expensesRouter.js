@@ -3,17 +3,19 @@ const { getExpenses,
     getOneExpense,
     addExpense,
     deleteExpense,
-    updateExpense } = require('../controllers/expensesControllers');
+    updateExpense,
+    uploadSupportingDocument
+} = require('../controllers/expensesControllers');
 
 const router = Router();
 
 router.route('/')
     .get(getExpenses)
-    .post(addExpense)
+    .post(uploadSupportingDocument.single("supportingDocument"), addExpense)
 
 router.route('/:expenseId')
     .get(getOneExpense)
-    .patch(updateExpense)
+    .patch(uploadSupportingDocument.single("supportingDocument"), updateExpense)
     .delete(deleteExpense)
 
 

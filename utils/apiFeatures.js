@@ -13,6 +13,7 @@ class APIFeatures {
         let queryString = JSON.stringify(queryObj);
         // Add $ on operators using regex
         queryString = queryString.replace(/\b(gt|gte|lt|lte|eq|ne|exists)\b/g, matched => `$${matched}`);
+        console.log(queryString);
         this.mongooseQuery = this.mongooseQuery.find(JSON.parse(queryString));
         return this;
     }
