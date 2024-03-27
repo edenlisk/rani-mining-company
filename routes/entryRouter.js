@@ -11,10 +11,10 @@ const router = Router();
 
 router.route('/:model')
     .get(getAllEntries)
-    .post(protect, createEntry)
+    .post(createEntry)
 
 router.route('/:model/:entryId')
-    .get(protect, getOneEntry)
+    .get(getOneEntry)
     .patch(protect, uploadGradeImg.any(), updateEntry)
     .delete(protect, deleteEntry)
 

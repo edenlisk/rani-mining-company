@@ -87,6 +87,19 @@ const entrySchema = new mongoose.Schema(
         commissioner: {
             type: mongoose.SchemaTypes.ObjectId,
             ref: 'Beneficiary'
+        },
+        paymentHistory: {
+            type: [
+                {
+                    type: mongoose.Types.ObjectId,
+                    ref: "Payment"
+                }
+            ],
+            default: []
+        },
+        settled: {
+            type: Boolean,
+            default: false
         }
     },{
         timestamps: true,
@@ -250,33 +263,6 @@ const lotSchema = new mongoose.Schema(
         //     type: String,
         //     default: "in stock"
         // },
-        paymentHistory: {
-            type: [
-                {
-                    paymentId: {
-                        type: mongoose.Schema.Types.ObjectId,
-                        ref: "Payment"
-                    },
-                    paymentAmount: Number,
-                    paymentDate: Date,
-                    paymentMode: String,
-                    beneficiary: String,
-                    currency: {
-                        type: String,
-                        default: "USD"
-                    },
-                    phoneNumber: {
-                        type: String,
-                        default: null
-                    },
-                    location: {
-                        type: String,
-                        default: null
-                    }
-                }
-            ],
-            default: []
-        },
         comment: {
             type: String,
             default: null
@@ -287,6 +273,43 @@ const lotSchema = new mongoose.Schema(
     }
 )
 
+entrySchema.virtual('paid').get(function () {
+    if (!this.paymentHistory.length) return {"USD": 0, "RWF": 0};
+    return this.paymentHistory.reduce((acc, curr) => {
+        if (curr.paymentAmount) {
+            const updatedAcc = { ...acc };
+            updatedAcc[curr.currency] = (updatedAcc[curr.currency] || 0) + curr.paymentAmount;
+            return updatedAcc;
+        } else {
+            return acc;
+        }
+    }, {"USD": 0, "RWF": 0});
+})
+
+entrySchema.virtual('totalNetPrice').get(function () {
+    if (!this.output) return 0;
+    return this.output.reduce((acc, curr) => {
+        if (curr.netPrice) {
+            return acc + curr.netPrice;
+        } else {
+            return acc;
+        }
+    }, 0);
+})
+
+entrySchema.virtual('totalRMAFee').get(function () {
+    if (!this.output) return 0;
+    return this.output.reduce((acc, curr) => {
+        if (curr.rmaFeeUSD) {
+            return acc + curr.rmaFeeUSD;
+        } else {
+            return acc;
+        }
+    }, 0);
+})
+
+
+
 
 entrySchema.pre('save', async function (next) {
     const { handleChangeSupplier } = require('../utils/helperFunctions');
@@ -295,16 +318,6 @@ entrySchema.pre('save', async function (next) {
     }
 })
 
-lotSchema.virtual('paid').get(function () {
-    if (!this.paymentHistory.length) return 0;
-    return this.paymentHistory.reduce((acc, curr) => {
-        if (curr.paymentAmount) {
-            return acc + curr.paymentAmount;
-        } else {
-            return acc;
-        }
-    }, 0);
-})
 
 lotSchema.virtual('rmaFeeUSD').get(function () {
     if (this.rmaFeeRWF && this.USDRate) {
@@ -321,13 +334,11 @@ lotSchema.virtual('netPrice').get(function () {
     } else {
         return null;
     }
-
 })
-lotSchema.virtual('unpaid').get(function () {
-    if (!this.netPrice) return null;
-    return (parseFloat(this.netPrice) - parseFloat(this.paid)).toFixed(5);
-
-})
+// lotSchema.virtual('unpaid').get(function () {
+//     if (!this.netPrice) return null;
+//     return (parseFloat(this.netPrice) - parseFloat(this.paid)).toFixed(5);
+// })
 lotSchema.virtual('exportedAmount').get(function () {
     if (!this.shipmentHistory.length) return 0;
     return this.shipmentHistory.reduce((acc, curr) => {
@@ -348,11 +359,10 @@ lotSchema.virtual('status').get(function () {
         return "sold out";
     }
 })
-lotSchema.virtual('settled').get(function () {
-    if (!this.netPrice) return false;
-    if (this.unpaid === 0 || this.paid === this.netPrice) return true;
-
-})
+// lotSchema.virtual('settled').get(function () {
+//     if (!this.netPrice) return false;
+//     if (this.unpaid === 0 || this.paid === this.netPrice) return true;
+// })
 
 
 // TODO 25: HOW TO CALCULATE RMA FEE RWF

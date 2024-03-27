@@ -10,7 +10,7 @@ const imagekit = require('../utils/imagekit');
 
 exports.getAllEntries = catchAsync(async (req, res, next) => {
     const Entry = getModel(req.params.model);
-    const result = new APIFeatures(Entry.find({visible: true}), req.query)
+    const result = new APIFeatures(Entry.find({visible: true}).populate('mineTags negociantTags paymentHistory'), req.query)
         .filter()
         .sort()
         .limitFields()
@@ -35,7 +35,8 @@ exports.getAllEntries = catchAsync(async (req, res, next) => {
 
 exports.getOneEntry = catchAsync(async (req, res, next) => {
     const Entry = getModel(req.params.model);
-    const entry = await Entry.findById(req.params.entryId).populate('mineTags').populate('negociantTags');
+    const entry = await Entry.findById(req.params.entryId).populate('mineTags negociantTags paymentHistory');
+    // console.log(entry)
     if (!entry) return next(new AppError(`${req.params.model?.toUpperCase()} entry was not found, please try again latter`, 400));
     res
         .status(200)

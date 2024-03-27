@@ -1,16 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const { addPayment, getAllPayments, getOnePayment, updatePayment } = require('../controllers/paymentControllers');
+const { addPayment,
+    getAllPayments,
+    getOnePayment,
+    updatePayment, uploadPaymentSupportingDoc } = require('../controllers/paymentControllers');
 const { protect, restrictTo } = require('../controllers/authControllers');
 
 router.route('/')
-    .get(protect, getAllPayments)
-    .post(protect, addPayment)
+    .get(getAllPayments)
+    .post(uploadPaymentSupportingDoc.single("supportingDoc"), addPayment)
 
 router.route('/:paymentId')
-    .get(protect, getOnePayment)
+    .get(getOnePayment)
 
 router.route('/update/:model/:paymentId')
-    .patch(protect, updatePayment)
+    .patch(uploadPaymentSupportingDoc.single('supportingDoc'), updatePayment)
 
 module.exports = router;
