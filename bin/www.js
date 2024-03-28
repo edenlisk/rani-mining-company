@@ -10,6 +10,7 @@ const app = require('../app');
 const debug = require('debug')('mining-company-management-system-backend:server');
 const http = require('http');
 
+// process.env.NODE_ENV=== 'development' ? process.env.MONGO_URL_DEV : process.env.MONGO_URL
 mongoose.connect(process.env.MONGO_URL, {dbName: "rani-mining-company-management-system"})
     .then(() => console.log("database connection successful"))
     .catch(err => console.log(err.message))

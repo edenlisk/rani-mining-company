@@ -54,7 +54,6 @@ exports.addPayment = catchAsync(async (req, res, next) => {
             currency: req.body.currency
         }
     )
-
     if (req.body.paymentInAdvanceId) {
         const advancePayment = await AdvancePayment.findById(req.body.paymentInAdvanceId);
         if (advancePayment) {
@@ -77,20 +76,20 @@ exports.addPayment = catchAsync(async (req, res, next) => {
         // payment.nationalId = entry.representativeId;
         payment.email = entry.email;
     }
-    // if (req.file) {
-    //     const data = fs.readFileSync(req.file.path);
-    //     const response = await imagekit.upload(
-    //         {
-    //             file: data,
-    //             fileName: `${req.body.beneficiary}_${req.body.paymentAmount}_${req.file.filename}`,
-    //             folder: "payment-supporting-documents"
-    //         }
-    //     )
-    //     if (response) {
-    //         payment.supportingDoc.fileId = response.fileId;
-    //         payment.supportingDoc.filePath = response.url;
-    //     }
-    // }
+    if (req.file) {
+        const data = fs.readFileSync(req.file.path);
+        const response = await imagekit.upload(
+            {
+                file: data,
+                fileName: `${req.body.beneficiary}_${req.body.paymentAmount}_${req.file.filename}`,
+                folder: "payment-supporting-documents"
+            }
+        )
+        if (response) {
+            payment.supportingDoc.fileId = response.fileId;
+            payment.supportingDoc.filePath = response.url;
+        }
+    }
     await payment.save({validateModifiedOnly: true});
 
     // await Payment.create(
@@ -126,9 +125,6 @@ exports.addPayment = catchAsync(async (req, res, next) => {
 exports.updatePayment = catchAsync(async (req, res, next) => {
     const payment = await Payment.findById(req.params.paymentId);
     if (!payment) return next(new AppError("Selected Payment does not exists!", 400));
-    const Entry = getModel(req.params.model);
-    const entry = await Entry.findById(payment.entryId);
-
     if (req.file) {
         const data = fs.readFileSync(req.file.path);
         const response = await imagekit.upload(
@@ -144,7 +140,6 @@ exports.updatePayment = catchAsync(async (req, res, next) => {
 
         }
     }
-
     if (req.body.paymentAmount) {
         payment.paymentAmount = req.body.paymentAmount;
     }
@@ -163,9 +158,25 @@ exports.updatePayment = catchAsync(async (req, res, next) => {
     if (req.body.location) {
         payment.location = req.body.location;
     }
+    if (req.body.currency) payment.currency = req.body.currency;
+    if (req.body.supportingDoc?.fileId === "") payment.supportingDoc.fileId = "";
+    if (req.body.supportingDoc?.filePath === "") payment.supportingDoc.filePath = "";
     await payment.save({validateModifiedOnly: true});
     res
         .status(201)
+        .json(
+            {
+                status: "Success"
+            }
+        )
+    ;
+})
+
+exports.deletePayment = catchAsync(async (req, res, next) => {
+    const payment = await Payment.findByIdAndRemove(req.params.paymentId);
+    if (!payment) return next(new AppError("The Selected Payment no longer exists!", 401));
+    res
+        .status(200)
         .json(
             {
                 status: "Success"

@@ -17,7 +17,7 @@ exports.getAllEntries = catchAsync(async (req, res, next) => {
         .paginate()
     ;
     const entries = await result.mongooseQuery;
-    const numberOfDocuments = await Entry.countDocuments();
+    const numberOfDocuments = entries.length;
     const totalPages = Math.ceil(numberOfDocuments / 100);
     res
         .status(200)
@@ -36,7 +36,6 @@ exports.getAllEntries = catchAsync(async (req, res, next) => {
 exports.getOneEntry = catchAsync(async (req, res, next) => {
     const Entry = getModel(req.params.model);
     const entry = await Entry.findById(req.params.entryId).populate('mineTags negociantTags paymentHistory');
-    // console.log(entry)
     if (!entry) return next(new AppError(`${req.params.model?.toUpperCase()} entry was not found, please try again latter`, 400));
     res
         .status(200)
@@ -154,11 +153,15 @@ exports.updateEntry = catchAsync(async (req, res, next) => {
             const existingLot = entry.output.find(el => parseInt(el.lotNumber) === parseInt(lot.lotNumber));
             if (existingLot) {
                 // COMMON FIELDS
+                if (lot.weightBefore) {
+                    if (parseFloat(lot.weightBefore) !== parseFloat(existingLot.weightBefore)) existingLot.weightBefore = lot.weightBefore;
+                }
                 if (lot.weightOut) {
                     if (parseFloat(lot.weightOut) !== existingLot.weightOut) existingLot.weightOut = lot.weightOut;
                 }
                 if (lot.mineralGrade) {
-                    if (parseFloat(lot.mineralGrade) !== existingLot.mineralGrade) existingLot.mineralGrade = lot.mineralGrade;
+                    if (parseFloat(lot.mineralGrade.actualValue) !== existingLot.mineralGrade.actualValue) existingLot.mineralGrade.actualValue = lot.mineralGrade.actualValue;
+                    if (parseFloat(lot.mineralGrade.newValue) !== existingLot.mineralGrade.newValue) existingLot.mineralGrade.newValue = lot.mineralGrade.newValue;
                 }
                 if (lot.pricingGrade) {
                     if (lot.pricingGrade !== existingLot.pricingGrade) existingLot.pricingGrade = lot.pricingGrade;
@@ -218,6 +221,7 @@ exports.updateEntry = catchAsync(async (req, res, next) => {
             }
         }
     }
+    if (req.body.commissioner) entry.commissioner = req.body.commissioner;
     await entry.save({validateModifiedOnly: true});
     res
         .status(202)

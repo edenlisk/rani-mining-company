@@ -4,9 +4,9 @@ const { protect } = require('../controllers/authControllers');
 const router = Router();
 
 router.route('/')
-    .get(protect, getSettings)
-    .post(protect, addSetting)
-    .patch(protect, updateSettings)
+    .get(getSettings)
+    .post(addSetting)
+    .patch(updateSettings)
 
 
 module.exports = router;
